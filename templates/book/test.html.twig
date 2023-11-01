@@ -1,0 +1,33 @@
+   
+   
+
+<table style=" margin:30px auto; border-collapse:collapse;">
+  
+    <tr>
+     <h1>Liste des étudiants</h1>
+      <th style="border: 1px solid #000;">Ref</th>
+      <th style="border: 1px solid #000;">Title</th>
+      <th style="border: 1px solid #000;">Publication Date</th>
+      <th style="border: 1px solid #000;">Category</th>
+      <th style="border: 1px solid #000;">Author</th>
+       <th style="border: 1px solid #000;">Action</th>
+      
+    </tr>
+  
+
+    {% for book in response %}
+      <tr>
+        <th style="border: 1px solid #000;">{{ book.id }}</th>
+        <th style="border: 1px solid #000;">{{ book.title }}</th>
+        <th style="border: 1px solid #000;">{{ book.publicationDate }}</th>
+        <th style="border: 1px solid #000;">{{ book.category }}</th>
+        <th style="border: 1px solid #000;">{{ book.author }}</th>
+        <th style="border: 1px solid #000;">
+          <a href="/update/{{ author.id }}" class="modifier">edit</a>
+          <a href="/remove1/{{ author.id }}" class="delete">delete</a>
+        </th>
+      </tr>
+
+    {% endfor %}
+  
+</table>

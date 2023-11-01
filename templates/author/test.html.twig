@@ -1,0 +1,30 @@
+   
+   
+
+<table style=" margin:30px auto; border-collapse:collapse;">
+  
+    <tr>
+     <h1>Liste des étudiants</h1>
+      <th style="border: 1px solid #000;">ID</th>
+      <th style="border: 1px solid #000;">USERNAME</th>
+      <th style="border: 1px solid #000;">EMAIL</th>
+       <th style="border: 1px solid #000;">Action</th>
+      
+    </tr>
+  
+
+    {% for author in response %}
+      <tr>
+        <th style="border: 1px solid #000;">{{ author.id }}</th>
+        <th style="border: 1px solid #000;">{{ author.username }}</th>
+        <th style="border: 1px solid #000;">{{ author.email }}</th>
+        
+        <th style="border: 1px solid #000;">
+          <a href="/update/{{ author.id }}" class="modifier">edit</a>
+          <a href="/remove1/{{ author.id }}" class="delete">delete</a>
+        </th>
+      </tr>
+
+    {% endfor %}
+  
+</table>
