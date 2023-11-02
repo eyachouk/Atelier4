@@ -113,4 +113,11 @@ class BookController extends AbstractController
             'book' => $book,
         ]);
     }
+    #[Route('/QB1/{ref}', name: 'QB1')]
+    public function QB1(StudentRepository $repo,$ref):Response
+    {
+    $result=$repo->searchBookByRef($ref);
+    return $this->render('book/searchBook.html.twig',[
+        'book' => $result]);
+    }
 }

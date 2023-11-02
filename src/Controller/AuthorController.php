@@ -102,4 +102,29 @@ class AuthorController extends AbstractController
     }
     return $this->redirectToRoute('fetch');
 }
+/*#[Route('/listAuthorByEmail', name: 'listAuthorByEmail')]
+public function listAuthorByEmail(EntityManagerInterface $em):Response
+{
+    $req=$em->createQuery("select a from App\Entity\Student a Order By a.email ");//tri
+    $result=$req->getResult();
+    return $this->render('author/listAuthorByEmail.html.twig', [
+        'response' => $result,
+    ]);
+}*/
+#[Route('/listAuthorByE', name: 'listAuthorByEmail')]
+public function listAuthorByEmail(EntityManagerInterface $em , Request $request , AuthorRepository $repo):Response
+{   
+
+    $result=$repo->listAuthorByEmail();
+    //$req=$em->createQuery("select s from App\Entity\Student s where s.name = :n ");
+    //if($request->isMethod('post')){
+        //$value=$request->get('test');
+        
+        
+              
+    //}
+    //dd($result);
+    return $this->render('author/listAuthorByEmail.html.twig',[
+    'response' => $result]);
+}
 }
