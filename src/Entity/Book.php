@@ -94,11 +94,5 @@ class Book
 
         return $this;
     }
-    public function deleteIfNoBooks(EntityManagerInterface $em)
-    {
-        if ($this->nb_books === 0) {
-            $em->remove($this);
-            $em->flush();
-        }
-    }
+    
 }
