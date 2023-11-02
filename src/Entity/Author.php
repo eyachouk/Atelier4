@@ -6,6 +6,7 @@ use App\Repository\AuthorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 class Author
@@ -107,5 +108,12 @@ class Author
     public function __toString()
     {
         return $this->getUsername(); 
+    }
+    public function deleteIfNoBooks(EntityManagerInterface $em)
+    {
+        if ($this->nb_books === 0) {
+            $em->remove($this);
+            $em->flush();
+        }
     }
 }

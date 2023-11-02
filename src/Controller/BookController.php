@@ -10,7 +10,10 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Book;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\BookType;
+use App\Form\BookType1Type;
 use App\Repository\BookRepository;
+use Doctrine\ORM\EntityManagerInterface;
+
 class BookController extends AbstractController
 {
     #[Route('/book', name: 'app_book')]
@@ -51,13 +54,63 @@ class BookController extends AbstractController
         ]);
     }
     #[Route('/fetch1', name: 'fetch1')]
-    public function fetch1(ManagerRegistry $mr): Response
+    public function fetch1(ManagerRegistry $mr,EntityManagerInterface $em , Request $request , BookRepository $repo1): Response
     {
         $repo=$mr->getRepository(Book::class);
         $result=$repo->findAll();
-
+        $result1=$repo1->findAll();
+        //$req=$em->createQuery("select s from App\Entity\Student s where s.name = :n ");
+        if($request->isMethod('post'))
+        {
+           // $value=$request->get('test');
+            $result1=$repo1->fetchBookByPublished1();
+           // dd($result);      
+        }
         return $this->render('book/test.html.twig', [
             'response' => $result,
+            'book1'=>$result1
+        ]);
+    }
+    #[Route('/update1/{id}', name: 'update1')]
+    public function update1(BookRepository $repo,ManagerRegistry $mr,Request $req,$id): Response
+    {
+        $book=$repo->find($id);//Recupération
+        $form=$this->createForm(BookType1Type::class,$book);//besh talkaha meebya l form
+        $form->handleRequest($req);
+            if ($form->isSubmitted()&& $form->isValid())
+            {
+                $em=$mr->getManager();//3-Persist+Flush
+                $em->persist($book);
+                $em->flush();
+                return $this->redirectToRoute('fetch1');
+            }
+        
+        return $this->render('book/update.html.twig',['f'=>$form->createView()]);
+	//ken amalt creation mtaa formulaire ekher lel update
+      // ou bien : return $this->renderForm('student/update.html.twig',['f'=>$form]);
+    }
+    #[Route('/remove/{id}', name: 'remove')]
+    public function remove(ManagerRegistry $mr,BookRepository $repo,$id): Response
+    {
+       $entite=$repo->find($id);
+        
+        if(!$entite)
+        {
+            throw $this->createNotFoundException('Aucune entité trouvée avec ce nom.');
+        }
+        $em=$mr->getManager();
+        $em->remove($entite);
+        $em->flush();
+        return $this->redirectToRoute('fetch1');    
+    }
+   
+    #[Route('/details/{id}', name: 'book_details')]
+    public function bookDetails(BookRepository $bookRepository, $id)
+    {
+        $book = $bookRepository->find($id);
+
+        return $this->render('book/details.html.twig', [
+            'book' => $book,
         ]);
     }
 }

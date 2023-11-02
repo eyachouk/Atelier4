@@ -45,4 +45,20 @@ class BookRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function fetchBookByPublished1()
+    {
+        $em=$this->getEntityManager();
+        $req=$em->createQuery("select count(b) from App\Entity\Book b where published!=null");
+        
+        $result=$req->getResult();
+        return $result;
+    }
+    public function fetchBookByPublished0()
+    {
+        $em=$this->getEntityManager();
+        $req=$em->createQuery("select count(b) from App\Entity\Book b where published=0");
+        
+        $result=$req->getResult();
+        return $result;
+    }
 }

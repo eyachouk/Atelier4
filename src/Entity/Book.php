@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\BookRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\ORM\EntityManagerInterface;
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
 {
@@ -93,5 +93,12 @@ class Book
         $this->author = $author;
 
         return $this;
+    }
+    public function deleteIfNoBooks(EntityManagerInterface $em)
+    {
+        if ($this->nb_books === 0) {
+            $em->remove($this);
+            $em->flush();
+        }
     }
 }

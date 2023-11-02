@@ -11,6 +11,7 @@ use App\Entity\Author;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\AuthorType;
 use App\Repository\AuthorRepository;
+use Doctrine\ORM\EntityManagerInterface;
 class AuthorController extends AbstractController
 {
     #[Route('/author', name: 'app_author')]
@@ -90,4 +91,15 @@ class AuthorController extends AbstractController
         $em->flush();
         return $this->redirectToRoute('fetch');    
     }
+    #[Route('/delete', name: 'delete')]
+    public function deleteAuthorsWithoutBooks(EntityManagerInterface $em)
+{
+    $authorRepository = $em->getRepository(Author::class);
+    $authors = $authorRepository->findAll();
+
+    foreach ($authors as $author) {
+        $author->deleteIfNoBooks($em);
+    }
+    return $this->redirectToRoute('fetch');
+}
 }
